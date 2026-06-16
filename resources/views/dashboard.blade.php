@@ -3,131 +3,255 @@
 @section('content')
 
 <style>
-  .hero {
+  .hero-wrap {
+    border-radius: 14px;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border: 1px solid #e2eaf3;
+    min-height: calc(100vh - 120px);
+  }
+
+  .hero-left {
     background: #0C447C;
-    border-radius: 12px;
-    padding: 2rem 2.5rem;
+    padding: 3rem;
     display: flex;
-    align-items: center;
+    flex-direction: column;
     justify-content: space-between;
     position: relative;
     overflow: hidden;
-    min-height: 130px;
   }
 
-  .hero-watermark {
-    position: absolute;
-    right: 2rem;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 90px;
-    font-weight: 700;
-    color: rgba(255,255,255,0.06);
-    letter-spacing: -2px;
-    user-select: none;
-    pointer-events: none;
-    line-height: 1;
+  .op2-arc {
+    position: absolute; right: -50px; top: -50px;
+    width: 220px; height: 220px; border-radius: 50%;
+    border: 45px solid rgba(255,255,255,0.05);
+  }
+  .op2-arc2 {
+    position: absolute; right: -20px; bottom: -60px;
+    width: 170px; height: 170px; border-radius: 50%;
+    border: 35px solid rgba(255,255,255,0.04);
+  }
+  .op2-arc3 {
+    position: absolute; left: -40px; top: 40%;
+    width: 130px; height: 130px; border-radius: 50%;
+    border: 25px solid rgba(255,255,255,0.03);
   }
 
-  .hero-circle1 {
-    position: absolute; right: -30px; top: -40px;
-    width: 180px; height: 180px; border-radius: 50%;
-    background: rgba(255,255,255,0.05);
-  }
-  .hero-circle2 {
-    position: absolute; right: 80px; bottom: -50px;
-    width: 120px; height: 120px; border-radius: 50%;
-    background: rgba(255,255,255,0.04);
-  }
-  .hero-circle3 {
-    position: absolute; left: -20px; bottom: -30px;
-    width: 100px; height: 100px; border-radius: 50%;
-    background: rgba(255,255,255,0.03);
+  .hero-brand {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: rgba(255,255,255,0.3);
+    text-transform: uppercase;
+    position: relative; z-index: 1;
   }
 
-  .hero-content { position: relative; z-index: 1; }
+  .hero-center {
+    position: relative; z-index: 1;
+  }
 
-  .hero-greeting {
-    font-size: 13px;
-    color: rgba(255,255,255,0.55);
-    margin-bottom: 0.3rem;
+  .hero-emoji { font-size: 48px; margin-bottom: 1rem; display: block; }
+
+  .hero-welcome {
+    font-size: 15px;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 0.4rem;
   }
 
   .hero-name {
-    font-size: 22px;
+    font-size: 36px;
     font-weight: 500;
     color: #fff;
-    margin: 0 0 0.4rem;
+    line-height: 1.1;
   }
 
   .hero-name span { color: #7EC8F7; }
 
-  .hero-sub {
-    font-size: 12px;
-    color: rgba(255,255,255,0.4);
+  .hero-bottom {
+    position: relative; z-index: 1;
   }
 
-  .hero-right { position: relative; z-index: 1; text-align: right; }
-  .hero-date { font-size: 12px; color: rgba(255,255,255,0.45); margin-bottom: 0.25rem; }
-  .hero-time { font-size: 26px; font-weight: 500; color: rgba(255,255,255,0.9); letter-spacing: 2px; }
+  .hero-date {
+    font-size: 13px;
+    color: rgba(255,255,255,0.35);
+  }
 
-  /* Logo grande debajo */
-  .logo-section {
+  /* Derecha */
+  .hero-right {
+    background: white;
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .time-block {
+    text-align: center;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid #f0f4f8;
+    margin-bottom: 1.5rem;
+  }
+
+  .time-num {
+    font-size: 64px;
+    font-weight: 500;
+    color: #0C447C;
+    letter-spacing: 4px;
+    line-height: 1;
+  }
+
+  .time-lbl {
+    font-size: 11px;
+    color: #8A93A2;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: 8px;
+  }
+
+  .stats-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    flex: 1;
+    justify-content: center;
+  }
+
+  .stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid #f0f4f8;
+    text-decoration: none;
+    transition: background 0.15s;
+  }
+
+  .stat-row:last-child { border-bottom: none; }
+
+  .stat-row:hover { background: #f8fbff; border-radius: 8px; padding-left: 8px; padding-right: 8px; }
+
+  .stat-row-left {
     display: flex;
     align-items: center;
-    justify-content: center;
-    margin-top: 3rem;
-    opacity: 0.08;
+    gap: 10px;
+    font-size: 14px;
+    color: #4F5869;
   }
 
-  .logo-section img {
-    width: 420px;
-    max-width: 80%;
-    filter: grayscale(100%);
+  .stat-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .stat-row-num {
+    font-size: 20px;
+    font-weight: 500;
+    color: #0C447C;
   }
 </style>
 
-{{-- Hero --}}
-<div class="hero">
-    <div class="hero-circle1"></div>
-    <div class="hero-circle2"></div>
-    <div class="hero-circle3"></div>
-    <div class="hero-watermark">FactuStock</div>
+<div class="hero-wrap">
 
-    <div class="hero-content">
-        <div class="hero-greeting">Panel de control — FactuStock</div>
-        <div class="hero-name">
-            👋 Bienvenido, <span>{{ auth()->user()->name }}</span>
-        </div>
-        <div class="hero-sub">
-            {{ now()->locale('es')->isoFormat('dddd, D [de] MMMM [de] YYYY') }}
-        </div>
+  {{-- Lado izquierdo --}}
+  <div class="hero-left">
+    <div class="op2-arc"></div>
+    <div class="op2-arc2"></div>
+    <div class="op2-arc3"></div>
+
+    <div class="hero-brand">FactuStock · Panel de control</div>
+
+    <div class="hero-center">
+      <span class="hero-emoji">👋</span>
+      <div class="hero-welcome">Bienvenido,</div>
+      <div class="hero-name">
+        <span>{{ auth()->user()->name }}</span>
+      </div>
     </div>
 
-    <div class="hero-right">
-        <div class="hero-date" id="heroDate"></div>
-        <div class="hero-time" id="heroTime"></div>
+    <div class="hero-bottom">
+      <div class="hero-date" id="heroDate"></div>
     </div>
-</div>
+  </div>
 
-{{-- Logo grande opacado --}}
-<div class="logo-section">
-    <img src="{{ asset('images/factustock-logo.png') }}" alt="FactuStock">
+  {{-- Lado derecho --}}
+  <div class="hero-right">
+
+    <div class="time-block">
+      <div class="time-num" id="heroTime">--:--</div>
+      <div class="time-lbl">Hora local</div>
+    </div>
+
+    <div class="stats-list">
+
+      @can('clientes')
+      <a href="{{ url('clientes') }}" class="stat-row">
+        <span class="stat-row-left">
+          <span class="stat-dot" style="background:#185FA5"></span>
+          Clientes
+        </span>
+        <span class="stat-row-num">{{ \App\Models\Cliente::count() }}</span>
+      </a>
+      @endcan
+
+      @can('cotizaciones')
+      <a href="{{ route('cotizaciones.index') }}" class="stat-row">
+        <span class="stat-row-left">
+          <span class="stat-dot" style="background:#3B6D11"></span>
+          Cotizaciones
+        </span>
+        <span class="stat-row-num">{{ \App\Models\Cotizacion::count() }}</span>
+      </a>
+      @endcan
+
+      @can('facturas')
+      <a href="{{ route('facturas.index') }}" class="stat-row">
+        <span class="stat-row-left">
+          <span class="stat-dot" style="background:#854F0B"></span>
+          Facturas
+        </span>
+        <span class="stat-row-num">{{ \App\Models\Factura::count() }}</span>
+      </a>
+      @endcan
+
+      @can('productos')
+      <a href="{{ url('productos') }}" class="stat-row">
+        <span class="stat-row-left">
+          <span class="stat-dot" style="background:#A32D2D"></span>
+          Productos
+        </span>
+        <span class="stat-row-num">{{ \App\Models\Producto::count() }}</span>
+      </a>
+      @endcan
+
+      @can('usuarios')
+      <a href="{{ url('usuarios') }}" class="stat-row">
+        <span class="stat-row-left">
+          <span class="stat-dot" style="background:#534AB7"></span>
+          Usuarios
+        </span>
+        <span class="stat-row-num">{{ \App\Models\User::count() }}</span>
+      </a>
+      @endcan
+
+    </div>
+  </div>
+
 </div>
 
 <script>
-    function updateTime() {
-        const now = new Date();
-        const dias = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
-        const meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
-        document.getElementById('heroDate').textContent =
-            dias[now.getDay()] + ', ' + now.getDate() + ' de ' + meses[now.getMonth()];
-        const h = String(now.getHours()).padStart(2,'0');
-        const m = String(now.getMinutes()).padStart(2,'0');
-        document.getElementById('heroTime').textContent = h + ':' + m;
-    }
-    updateTime();
-    setInterval(updateTime, 60000);
+  function updateTime() {
+    const now = new Date();
+    const dias = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+    const meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+    document.getElementById('heroDate').textContent =
+      dias[now.getDay()] + ', ' + now.getDate() + ' de ' + meses[now.getMonth()] + ' de ' + now.getFullYear();
+    const h = String(now.getHours()).padStart(2,'0');
+    const m = String(now.getMinutes()).padStart(2,'0');
+    document.getElementById('heroTime').textContent = h + ':' + m;
+  }
+  updateTime();
+  setInterval(updateTime, 1000);
 </script>
 
 @endsection
