@@ -20,7 +20,7 @@
             "id": 3,
             "name": "Geraldin",
             "apellidos": "Garcia",
-            "rut": null,
+            
             "telefono": "3046653964",
             "direccion": "Barranquilla",
             "rol": "vendedor",
