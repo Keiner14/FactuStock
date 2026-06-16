@@ -29,9 +29,6 @@ class ImportarDatos extends Command
 
         $datos = json_decode(file_get_contents($ruta), true);
 
-        // Desactivar restricciones de llaves foráneas mientras insertamos
-        DB::statement('SET CONSTRAINTS ALL DEFERRED');
-
         $this->importarTabla('users', User::class, $datos['users']);
         $this->importarTabla('clientes', Cliente::class, $datos['clientes']);
         $this->importarTabla('productos', Producto::class, $datos['productos']);
@@ -50,10 +47,16 @@ class ImportarDatos extends Command
         $insertados = 0;
 
         foreach ($registros as $registro) {
-            // Verificar si ya existe un registro con ese ID para no duplicar
             $existe = DB::table($tabla)->where('id', $registro['id'])->exists();
 
             if (!$existe) {
+                // Convertir cualquier valor array (ej: columnas JSON) a string JSON
+                foreach ($registro as $campo => $valor) {
+                    if (is_array($valor)) {
+                        $registro[$campo] = json_encode($valor);
+                    }
+                }
+
                 DB::table($tabla)->insert($registro);
                 $insertados++;
             }
