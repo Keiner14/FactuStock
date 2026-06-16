@@ -53,6 +53,15 @@
                 <div style="font-size:0.88rem;font-weight:700;color:#0C447C;">${{ number_format($entrada->cantidad * $entrada->costo_unitario, 2) }}</div>
             </div>
 
+            {{-- Botón PDF --}}
+            <div style="flex-shrink:0;">
+                <a href="{{ route('entradas.pdf', $entrada->id) }}"
+                   target="_blank"
+                   style="background:#e74c3c;color:white;padding:0.3rem 0.8rem;border-radius:5px;text-decoration:none;font-size:0.72rem;font-weight:600;">
+                    📄 PDF
+                </a>
+            </div>
+
             {{-- Fecha --}}
             <div style="flex:1;text-align:right;">
                 <div style="font-size:0.68rem;color:#8A93A2;">{{ $entrada->created_at->format('d/m/Y') }}</div>
