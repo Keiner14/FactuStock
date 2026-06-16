@@ -8,15 +8,19 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('cotizaciones', function (Blueprint $table) {
-            $table->integer('consecutivo')->unique()->after('id');
-        });
+        if (!Schema::hasColumn('cotizaciones', 'consecutivo')) {
+            Schema::table('cotizaciones', function (Blueprint $table) {
+                $table->integer('consecutivo')->unique()->after('id');
+            });
+        }
     }
 
     public function down(): void
     {
-        Schema::table('cotizaciones', function (Blueprint $table) {
-            $table->dropColumn('consecutivo');
-        });
+        if (Schema::hasColumn('cotizaciones', 'consecutivo')) {
+            Schema::table('cotizaciones', function (Blueprint $table) {
+                $table->dropColumn('consecutivo');
+            });
+        }
     }
 };
