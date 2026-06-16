@@ -5,34 +5,48 @@ namespace App\Exports;
 use App\Models\Producto;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithMapping;
 
-class ProductosExport implements FromCollection, WithHeadings
+class ProductosExport implements FromCollection, WithHeadings, WithMapping
 {
-    // Retorna todos los productos para exportar
     public function collection()
     {
-        return Producto::select(
-            'nombre',
-            'codigo',
-            'categoria',
-            'costo',
-            'porcentaje_ganancia',
-            'precio_venta',
-            'stock'
-        )->get();
+        return Producto::orderBy('nombre')->get();
     }
 
-    // Encabezados de las columnas en el Excel
     public function headings(): array
     {
         return [
-            'Nombre',
+            '#',
             'Código',
-            'Categoría',
-            'Costo',
-            '% Ganancia',
-            'Precio de Venta',
+            'Nombre',
+            'Presentación',
+            'IVA (%)',
+            'Costo Unitario',
             'Stock',
+            'Estado',
+        ];
+    }
+
+    public function map($producto): array
+    {
+        if ($producto->stock > 10) {
+            $estado = 'Disponible';
+        } elseif ($producto->stock > 0) {
+            $estado = 'Stock bajo';
+        } else {
+            $estado = 'Sin stock';
+        }
+
+        return [
+            $producto->id,
+            $producto->codigo,
+            $producto->nombre,
+            $producto->categoria ?? 'Sin categoría',
+            $producto->iva . '%',
+            '$' . number_format($producto->costo_promedio, 2),
+            $producto->stock,
+            $estado,
         ];
     }
 }
