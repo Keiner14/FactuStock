@@ -28,4 +28,4 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 EXPOSE 10000
 
-CMD php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=${PORT}
+CMD php artisan migrate --force && php artisan datos:importar && php artisan serve --host=0.0.0.0 --port=${PORT}
