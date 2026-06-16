@@ -147,7 +147,6 @@
         font-size: 0.85rem;
     }
 
-    /* ===== MODAL ===== */
     .modal-overlay {
         display: none;
         position: fixed;
@@ -245,7 +244,7 @@
 <div class="top-bar">
     <div class="search-bar">
         <span class="icon">🔍</span>
-        <input type="text" id="buscador" placeholder="Buscar por nombre, número de cédula, celular o dirección...">
+        <input type="text" id="buscador" placeholder="Buscar por nombre, cédula, celular, correo o dirección...">
     </div>
     <a href="{{ route('clientes.create') }}" class="btn-nuevo">＋ Nuevo Cliente</a>
 </div>
@@ -258,6 +257,7 @@
                 <th>Cliente</th>
                 <th>Cédula</th>
                 <th>Celular</th>
+                <th>Correo electrónico</th>
                 <th>Dirección</th>
                 <th style="text-align:right;">Acciones</th>
             </tr>
@@ -284,6 +284,12 @@
                     <div class="contacto-info">
                         <span class="icon-mini">📱</span>
                         {{ $cliente->celular ?? '—' }}
+                    </div>
+                </td>
+                <td data-search="{{ $cliente->email }}">
+                    <div class="contacto-info">
+                        <span class="icon-mini">✉️</span>
+                        {{ $cliente->email ?? '—' }}
                     </div>
                 </td>
                 <td data-search="{{ $cliente->direccion }}">
@@ -313,7 +319,7 @@
             </tr>
             @empty
             <tr>
-                <td colspan="5" class="tabla-empty">No hay clientes registrados en el sistema.</td>
+                <td colspan="6" class="tabla-empty">No hay clientes registrados en el sistema.</td>
             </tr>
             @endforelse
         </tbody>
