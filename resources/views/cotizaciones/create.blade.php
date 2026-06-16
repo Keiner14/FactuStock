@@ -367,10 +367,10 @@
         }
 
         if (precio < costo) {
-            if (!confirm(`⚠️ El precio $${formatear(precio)} es menor al costo $${formatear(costo)}.\n¿Deseas continuar de todas formas?`)) {
-                return;
-            }
-        }
+    alert(`❌ No puedes vender por debajo del costo.\nPrecio ingresado: $${formatear(precio)}\nCosto promedio: $${formatear(costo)}`);
+    document.getElementById('modal_precio').focus();
+    return;
+    }
 
         agregarItem(modalProductoActual, cantidad, precio);
 
