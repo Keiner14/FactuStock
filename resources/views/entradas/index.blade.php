@@ -29,10 +29,10 @@
                 <div style="font-size:0.95rem;font-weight:700;color:#27a744;">+{{ $entrada->cantidad }}</div>
             </div>
 
-            {{-- Stock anterior --}}
+            {{-- Costo unitario --}}
             <div style="flex:1;text-align:center;">
-                <div style="font-size:0.68rem;color:#8A93A2;margin-bottom:2px;">STOCK ANTERIOR</div>
-                <div style="font-size:0.88rem;font-weight:600;">{{ $entrada->stock_anterior }}</div>
+                <div style="font-size:0.68rem;color:#8A93A2;margin-bottom:2px;">COSTO UND</div>
+                <div style="font-size:0.88rem;font-weight:600;">${{ number_format($entrada->costo_unitario, 2) }}</div>
             </div>
 
             {{-- Stock nuevo --}}
@@ -45,6 +45,12 @@
             <div style="flex:2;">
                 <div style="font-size:0.68rem;color:#8A93A2;margin-bottom:2px;">OBSERVACIÓN</div>
                 <div style="font-size:0.78rem;color:#4F5869;">{{ $entrada->observacion ?? 'Sin observación' }}</div>
+            </div>
+
+            {{-- Total entrada --}}
+            <div style="flex:1;text-align:center;">
+                <div style="font-size:0.68rem;color:#8A93A2;margin-bottom:2px;">TOTAL ENTRADA</div>
+                <div style="font-size:0.88rem;font-weight:700;color:#0C447C;">${{ number_format($entrada->cantidad * $entrada->costo_unitario, 2) }}</div>
             </div>
 
             {{-- Fecha --}}
