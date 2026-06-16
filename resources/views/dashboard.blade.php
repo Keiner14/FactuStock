@@ -10,6 +10,7 @@
     gap: 1.5rem;
   }
 
+  /* HERO AZUL ARRIBA */
   .hero-top {
     background: linear-gradient(135deg, #0C447C 0%, #1a6db5 50%, #0C447C 100%);
     border-radius: 14px;
@@ -37,7 +38,9 @@
     border: 25px solid rgba(255,255,255,0.03);
   }
 
-  .hero-left-text { position: relative; z-index: 1; }
+  .hero-left-text {
+    position: relative; z-index: 1;
+  }
 
   .hero-brand {
     font-size: 11px;
@@ -82,9 +85,10 @@
     margin-top: 6px;
   }
 
+  /* LOGO ABAJO */
   .logo-area {
     flex: 1;
-    background: #f0f2f5;
+    background: #1A4F7A;
     border-radius: 14px;
     display: flex;
     align-items: center;
@@ -96,17 +100,18 @@
 
   .logo-area-bg {
     position: absolute; inset: 0;
-    background-image: radial-gradient(rgba(0,0,0,0.04) 1px, transparent 1px);
+    background-image:
+      radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
     background-size: 24px 24px;
   }
 
   .logo-area img {
     position: relative;
     z-index: 1;
-    max-width: 400px;
-    width: 65%;
-    opacity: 0.45;
-    filter: none;
+    max-width: 340px;
+    width: 60%;
+    opacity: 0.18;
+    filter: brightness(10);
     user-select: none;
     pointer-events: none;
   }
