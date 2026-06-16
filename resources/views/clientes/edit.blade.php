@@ -51,14 +51,9 @@
         margin-bottom: 1rem;
     }
 
-    .form-grid.full {
-        grid-template-columns: 1fr;
-    }
+    .form-grid.full { grid-template-columns: 1fr; }
 
-    .form-group {
-        display: flex;
-        flex-direction: column;
-    }
+    .form-group { display: flex; flex-direction: column; }
 
     .form-group label {
         font-size: 0.74rem;
@@ -117,7 +112,6 @@
         font-weight: 700;
         font-size: 1.2rem;
         flex-shrink: 0;
-        id: avatarCircle;
     }
 
     .avatar-info .nombre-preview {
@@ -177,7 +171,6 @@
 
 <div class="form-card">
 
-    {{-- Avatar preview --}}
     <div class="avatar-preview">
         <div class="avatar-circle" id="avatarCircle">
             {{ strtoupper(substr($cliente->nombre, 0, 2)) }}
@@ -234,6 +227,19 @@
             </div>
         </div>
 
+        {{-- Email campo completo --}}
+        <div class="form-grid full">
+            <div class="form-group">
+                <label>Correo electrónico</label>
+                <input type="email" name="email"
+                       value="{{ old('email', $cliente->email) }}"
+                       placeholder="ejemplo@correo.com">
+                @error('email')
+                    <span class="error-msg">{{ $message }}</span>
+                @enderror
+            </div>
+        </div>
+
         <div class="form-actions">
             <button type="submit" class="btn-guardar">💾 Guardar cambios</button>
             <a href="{{ route('clientes.index') }}" class="btn-cancelar">Cancelar</a>
@@ -243,7 +249,6 @@
 </div>
 
 <script>
-    // Actualizar avatar y nombre en tiempo real
     const inputNombre = document.getElementById('inputNombre');
     const avatarCircle = document.getElementById('avatarCircle');
     const nombrePreview = document.getElementById('nombrePreview');

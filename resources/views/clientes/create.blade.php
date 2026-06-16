@@ -51,10 +51,9 @@
         margin-bottom: 1rem;
     }
 
-    .form-group {
-        display: flex;
-        flex-direction: column;
-    }
+    .form-grid.full { grid-template-columns: 1fr; }
+
+    .form-group { display: flex; flex-direction: column; }
 
     .form-group label {
         font-size: 0.74rem;
@@ -172,7 +171,6 @@
 
 <div class="form-card">
 
-    {{-- Avatar preview --}}
     <div class="avatar-preview">
         <div class="avatar-circle" id="avatarCircle">?</div>
         <div class="avatar-info">
@@ -221,6 +219,19 @@
                 <input type="text" name="direccion"
                        value="{{ old('direccion') }}" required>
                 @error('direccion')
+                    <span class="error-msg">{{ $message }}</span>
+                @enderror
+            </div>
+        </div>
+
+        {{-- Email campo completo --}}
+        <div class="form-grid full">
+            <div class="form-group">
+                <label>Correo electrónico</label>
+                <input type="email" name="email"
+                       value="{{ old('email') }}"
+                       placeholder="ejemplo@correo.com">
+                @error('email')
                     <span class="error-msg">{{ $message }}</span>
                 @enderror
             </div>
