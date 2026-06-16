@@ -56,7 +56,7 @@
     .form-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 1.2rem; /* ✅ aumentado de 0.9rem */
+        gap: 1.2rem;
     }
 
     .form-grid.full { grid-template-columns: 1fr; }
@@ -76,16 +76,16 @@
 
     .form-group input,
     .form-group select {
-        height: 42px; /* ✅ aumentado de 38px */
+        height: 42px;
         border: 1.5px solid #D5D9E0;
         border-radius: 7px;
-        padding: 0 0.9rem; /* ✅ aumentado de 0.7rem */
+        padding: 0 0.9rem;
         font-size: 0.85rem;
         color: #333;
         transition: border 0.15s, box-shadow 0.15s;
         outline: none;
         background: white;
-        margin-bottom: 0.2rem; /* ✅ agregado */
+        margin-bottom: 0.2rem;
     }
 
     .form-group input:focus,
@@ -258,7 +258,7 @@
 </div>
 @endif
 
-<form method="POST" action="{{ route('usuarios.store') }}" autocomplete="off">
+<form method="POST" action="{{ route('usuarios.store') }}" autocomplete="off" data-lpignore="true">
     @csrf
 
     <div class="form-container">
@@ -297,24 +297,32 @@
             <div class="form-grid full">
                 <div class="form-group">
                     <label>Correo electrónico <span class="req">*</span></label>
-                    <input type="email" name="email" value="{{ old('email') }}" required autocomplete="off">
+                    <input type="email" name="email" value="{{ old('email') }}" required
+                           autocomplete="off"
+                           data-lpignore="true">
                 </div>
             </div>
 
-            <div class="form-grid" style="margin-top:1rem;"> {{-- ✅ margen extra arriba --}}
+            <div class="form-grid" style="margin-top:1rem;">
                 <div class="form-group">
                     <label>Contraseña <span class="req">*</span></label>
-                    <input type="password" name="password" required autocomplete="new-password">
+                    <input type="password" name="password" required
+                           autocomplete="new-password"
+                           data-lpignore="true"
+                           readonly onfocus="this.removeAttribute('readonly')">
                     <div class="hint">Mínimo 8 caracteres</div>
                 </div>
 
                 <div class="form-group">
                     <label>Confirmar contraseña <span class="req">*</span></label>
-                    <input type="password" name="password_confirmation" required autocomplete="new-password">
+                    <input type="password" name="password_confirmation" required
+                           autocomplete="new-password"
+                           data-lpignore="true"
+                           readonly onfocus="this.removeAttribute('readonly')">
                 </div>
             </div>
 
-            <div class="form-grid full" style="margin-top:1rem;"> {{-- ✅ margen extra arriba --}}
+            <div class="form-grid full" style="margin-top:1rem;">
                 <div class="form-group">
                     <label>Tipo de usuario <span class="req">*</span></label>
                     <select name="rol" id="rolSelect" required>
