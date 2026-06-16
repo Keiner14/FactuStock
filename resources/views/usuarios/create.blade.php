@@ -217,6 +217,17 @@
         font-size: 0.75rem;
         margin-bottom: 0.8rem;
     }
+
+    /* Checkbox deshabilitado para admin */
+    .permiso-item input[type="checkbox"]:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .permiso-item:has(input:disabled) {
+        opacity: 0.75;
+        cursor: not-allowed;
+    }
 </style>
 
 @php
@@ -359,37 +370,53 @@
 </form>
 
 <script>
-    function marcarTodos(estado) {
-        document.querySelectorAll('.check-permiso').forEach(c => c.checked = estado);
-    }
-
     const rolSelect = document.getElementById('rolSelect');
     const avisoAdmin = document.getElementById('avisoAdmin');
+    const checkboxes = document.querySelectorAll('.check-permiso');
 
-    // Permisos por defecto para un vendedor nuevo
-    const permisosVendedorPorDefecto = ['clientes', 'cotizaciones', 'facturas'];
+    // Permisos por defecto para vendedor
+    const permisosVendedor = ['clientes', 'cotizaciones', 'facturas'];
 
-    function marcarPermisosVendedor() {
-        document.querySelectorAll('.check-permiso').forEach(c => {
-            c.checked = permisosVendedorPorDefecto.includes(c.value);
+    function marcarTodos(estado) {
+        // Solo funciona si no es admin
+        if (rolSelect.value === 'administrador') return;
+        checkboxes.forEach(c => {
+            c.checked = estado;
+            c.disabled = false;
         });
     }
 
     function actualizarSegunRol() {
-        if (rolSelect.value === 'administrador') {
-            marcarTodos(true);
+        const rol = rolSelect.value;
+
+        if (rol === 'administrador') {
+            // Marcar todos y bloquear edición
+            checkboxes.forEach(c => {
+                c.checked = true;
+                c.disabled = true;
+            });
             avisoAdmin.style.display = 'block';
-        } else if (rolSelect.value === 'vendedor') {
-            marcarPermisosVendedor();
+
+        } else if (rol === 'vendedor') {
+            // Solo marcar los 3 por defecto, resto desmarcado, todos editables
+            checkboxes.forEach(c => {
+                c.checked = permisosVendedor.includes(c.value);
+                c.disabled = false;
+            });
             avisoAdmin.style.display = 'none';
+
         } else {
-            marcarTodos(false);
+            // Sin rol: todo limpio
+            checkboxes.forEach(c => {
+                c.checked = false;
+                c.disabled = false;
+            });
             avisoAdmin.style.display = 'none';
         }
     }
 
     rolSelect.addEventListener('change', actualizarSegunRol);
-    actualizarSegunRol();
+    actualizarSegunRol(); // ejecutar al cargar
 </script>
 
 @endsection
