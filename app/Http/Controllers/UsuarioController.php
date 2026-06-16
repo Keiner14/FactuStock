@@ -10,10 +10,10 @@ use Illuminate\Support\Facades\DB;
 class UsuarioController extends Controller
 {
     public function index()
-    {
-        $usuarios = User::all();
-        return view('usuarios.index', compact('usuarios'));
-    }
+{
+    $usuarios = User::orderBy('id', 'asc')->get();
+    return view('usuarios.index', compact('usuarios'));
+}
 
     public function create()
     {
