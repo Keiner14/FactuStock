@@ -6,6 +6,7 @@ use App\Models\EntradaMercancia;
 use App\Models\Producto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class EntradaMercanciaController extends Controller
 {
@@ -54,33 +55,26 @@ class EntradaMercanciaController extends Controller
             'costo_unitario.min'       => 'El costo unitario no puede ser negativo.',
         ]);
 
-        // Verificar que el producto existe
         $producto = Producto::where('codigo', $request->codigo_producto)->first();
 
         if (!$producto) {
             return back()->withErrors(['codigo_producto' => 'El código ingresado no existe en el inventario.'])->withInput();
         }
 
-        // Calcular costo promedio ponderado
         $costo_promedio_nuevo = $producto->calcularCostoPromedio($request->cantidad, $request->costo_unitario);
-
-        // Guardar stock anterior y calcular nuevo stock
         $stock_anterior = $producto->stock;
         $stock_nuevo    = $stock_anterior + $request->cantidad;
 
-        // Actualizar el stock y costo promedio del producto
         $producto->update([
             'stock'          => $stock_nuevo,
             'costo_promedio' => $costo_promedio_nuevo,
         ]);
 
-        // Corrige la secuencia del ID en PostgreSQL solo si hay registros
         $maxId = EntradaMercancia::max('id') ?? 0;
         if ($maxId > 0) {
             DB::statement("SELECT setval('entrada_mercancias_id_seq', $maxId)");
         }
 
-        // Registrar la entrada
         EntradaMercancia::create([
             'consecutivo'          => EntradaMercancia::generarConsecutivo(),
             'producto_id'          => $producto->id,
@@ -95,5 +89,13 @@ class EntradaMercanciaController extends Controller
         ]);
 
         return redirect()->route('entradas.index')->with('success', 'Entrada registrada correctamente. Stock y costo promedio actualizados.');
+    }
+
+    public function pdf($id)
+    {
+        $entrada = EntradaMercancia::findOrFail($id);
+        $usuario = auth()->user();
+        $pdf = Pdf::loadView('entradas.pdf', compact('entrada', 'usuario'));
+        return $pdf->download('entrada-' . str_pad($entrada->consecutivo, 4, '0', STR_PAD_LEFT) . '.pdf');
     }
 }

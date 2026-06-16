@@ -40,6 +40,7 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware('can:entradas')->group(function () {
         Route::get('entradas/buscar-producto', [EntradaMercanciaController::class, 'buscarProducto'])->name('entradas.buscar');
         Route::resource('entradas', EntradaMercanciaController::class)->only(['index', 'create', 'store']);
+        Route::get('entradas/{id}/pdf', [EntradaMercanciaController::class, 'pdf'])->name('entradas.pdf');
     });
 
     // ─── CLIENTES ───────────────────────────────────────
