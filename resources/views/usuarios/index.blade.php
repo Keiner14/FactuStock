@@ -3,7 +3,6 @@
 @section('content')
 
 <style>
-    /* ===== ENCABEZADO ===== */
     .page-header {
         display: flex;
         justify-content: space-between;
@@ -42,7 +41,6 @@
 
     .btn-nuevo:hover { background: #2a7bc8; color: white; }
 
-    /* ===== TARJETAS DE RESUMEN ===== */
     .stats-row {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -91,7 +89,6 @@
         letter-spacing: 0.05em;
     }
 
-    /* ===== BARRA DE BÚSQUEDA ===== */
     .search-bar {
         background: white;
         padding: 0.7rem 1rem;
@@ -112,12 +109,8 @@
         color: #333;
     }
 
-    .search-bar .icon {
-        color: #8A93A2;
-        font-size: 1rem;
-    }
+    .search-bar .icon { color: #8A93A2; font-size: 1rem; }
 
-    /* ===== TABLA ===== */
     .tabla-card {
         background: white;
         border-radius: 12px;
@@ -160,12 +153,7 @@
         vertical-align: middle;
     }
 
-    /* ===== AVATAR USUARIO ===== */
-    .user-cell {
-        display: flex;
-        align-items: center;
-        gap: 0.7rem;
-    }
+    .user-cell { display: flex; align-items: center; gap: 0.7rem; }
 
     .avatar {
         width: 36px;
@@ -181,17 +169,9 @@
         flex-shrink: 0;
     }
 
-    .user-name {
-        font-weight: 600;
-        color: #2C3E50;
-    }
+    .user-name { font-weight: 600; color: #2C3E50; }
+    .user-id { font-size: 0.7rem; color: #8A93A2; }
 
-    .user-id {
-        font-size: 0.7rem;
-        color: #8A93A2;
-    }
-
-    /* ===== BADGE DE ROL ===== */
     .badge-rol {
         display: inline-block;
         padding: 0.25rem 0.7rem;
@@ -202,21 +182,10 @@
         letter-spacing: 0.04em;
     }
 
-    .badge-admin {
-        background: #fff4e6;
-        color: #b45f06;
-    }
+    .badge-admin { background: #fff4e6; color: #b45f06; }
+    .badge-vendedor { background: #e8f5e9; color: #1f8f4e; }
 
-    .badge-vendedor {
-        background: #e8f5e9;
-        color: #1f8f4e;
-    }
-
-    /* ===== BOTONES DE ACCIÓN ===== */
-    .acciones-cell {
-        display: flex;
-        gap: 0.4rem;
-    }
+    .acciones-cell { display: flex; gap: 0.4rem; }
 
     .btn-accion {
         padding: 0.35rem 0.75rem;
@@ -233,16 +202,8 @@
     }
 
     .btn-accion:hover { opacity: 0.85; }
-
-    .btn-editar {
-        background: #f39c12;
-        color: white;
-    }
-
-    .btn-eliminar {
-        background: #e74c3c;
-        color: white;
-    }
+    .btn-editar { background: #f39c12; color: white; }
+    .btn-eliminar { background: #e74c3c; color: white; }
 
     .tabla-empty {
         padding: 2.5rem;
@@ -250,9 +211,105 @@
         color: #8A93A2;
         font-size: 0.85rem;
     }
+
+    /* ===== MODAL DE CONFIRMACIÓN ===== */
+    .modal-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.45);
+        z-index: 9999;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .modal-overlay.active { display: flex; }
+
+    .modal-box {
+        background: white;
+        border-radius: 16px;
+        padding: 2rem;
+        max-width: 400px;
+        width: 90%;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+        text-align: center;
+        animation: modalIn 0.2s ease;
+    }
+
+    @keyframes modalIn {
+        from { transform: scale(0.92); opacity: 0; }
+        to   { transform: scale(1);    opacity: 1; }
+    }
+
+    .modal-icono {
+        width: 64px;
+        height: 64px;
+        background: #fdecea;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.8rem;
+        margin: 0 auto 1.2rem;
+    }
+
+    .modal-titulo {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #2C3E50;
+        margin-bottom: 0.5rem;
+    }
+
+    .modal-desc {
+        font-size: 0.85rem;
+        color: #8A93A2;
+        margin-bottom: 1.5rem;
+        line-height: 1.5;
+    }
+
+    .modal-nombre {
+        color: #e74c3c;
+        font-weight: 600;
+    }
+
+    .modal-btns {
+        display: flex;
+        gap: 0.75rem;
+        justify-content: center;
+    }
+
+    .btn-modal-cancelar {
+        flex: 1;
+        padding: 0.65rem;
+        border-radius: 8px;
+        border: 1.5px solid #D5D9E0;
+        background: white;
+        color: #4F5869;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: border-color 0.15s;
+    }
+
+    .btn-modal-cancelar:hover { border-color: #378ADD; color: #378ADD; }
+
+    .btn-modal-eliminar {
+        flex: 1;
+        padding: 0.65rem;
+        border-radius: 8px;
+        border: none;
+        background: #e74c3c;
+        color: white;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.15s;
+    }
+
+    .btn-modal-eliminar:hover { background: #c0392b; }
 </style>
 
-{{-- ===== ENCABEZADO ===== --}}
+{{-- ENCABEZADO --}}
 <div class="page-header">
     <div class="page-title-group">
         <h2>Gestión de Usuarios</h2>
@@ -263,10 +320,10 @@
     </a>
 </div>
 
-{{-- ===== TARJETAS DE RESUMEN ===== --}}
+{{-- TARJETAS --}}
 @php
     $totalUsuarios = $usuarios->count();
-    $totalAdmin = $usuarios->where('rol', 'administrador')->count();
+    $totalAdmin    = $usuarios->where('rol', 'administrador')->count();
     $totalVendedor = $usuarios->where('rol', 'vendedor')->count();
 @endphp
 
@@ -294,13 +351,13 @@
     </div>
 </div>
 
-{{-- ===== BARRA DE BÚSQUEDA ===== --}}
+{{-- BUSCADOR --}}
 <div class="search-bar">
     <span class="icon">🔍</span>
     <input type="text" id="buscador" placeholder="Buscar por nombre o correo electrónico...">
 </div>
 
-{{-- ===== TABLA ===== --}}
+{{-- TABLA --}}
 <div class="tabla-card">
     <table>
         <thead>
@@ -336,11 +393,18 @@
                         <a href="{{ route('usuarios.edit', $usuario) }}" class="btn-accion btn-editar">
                             ✏️ Editar
                         </a>
-                        <form method="POST" action="{{ route('usuarios.destroy', $usuario) }}" style="display:inline" onsubmit="return confirm('¿Eliminar al usuario {{ $usuario->name }}?')">
+                        {{-- Formulario oculto --}}
+                        <form id="form-eliminar-{{ $usuario->id }}"
+                              method="POST"
+                              action="{{ route('usuarios.destroy', $usuario) }}"
+                              style="display:none;">
                             @csrf
                             @method('DELETE')
-                            <button class="btn-accion btn-eliminar">🗑️ Eliminar</button>
                         </form>
+                        <button class="btn-accion btn-eliminar"
+                                onclick="abrirModal({{ $usuario->id }}, '{{ addslashes($usuario->name) }}')">
+                            🗑️ Eliminar
+                        </button>
                     </div>
                 </td>
             </tr>
@@ -353,14 +417,52 @@
     </table>
 </div>
 
+{{-- MODAL --}}
+<div class="modal-overlay" id="modalEliminar">
+    <div class="modal-box">
+        <div class="modal-icono">🗑️</div>
+        <div class="modal-titulo">¿Eliminar usuario?</div>
+        <div class="modal-desc">
+            Estás a punto de eliminar a <span class="modal-nombre" id="modalNombre"></span>.<br>
+            Esta acción no se puede deshacer.
+        </div>
+        <div class="modal-btns">
+            <button class="btn-modal-cancelar" onclick="cerrarModal()">Cancelar</button>
+            <button class="btn-modal-eliminar" onclick="confirmarEliminar()">Sí, eliminar</button>
+        </div>
+    </div>
+</div>
+
 <script>
-    // Buscador en tiempo real
+    let formIdActual = null;
+
+    function abrirModal(id, nombre) {
+        formIdActual = id;
+        document.getElementById('modalNombre').textContent = nombre;
+        document.getElementById('modalEliminar').classList.add('active');
+    }
+
+    function cerrarModal() {
+        formIdActual = null;
+        document.getElementById('modalEliminar').classList.remove('active');
+    }
+
+    function confirmarEliminar() {
+        if (formIdActual) {
+            document.getElementById('form-eliminar-' + formIdActual).submit();
+        }
+    }
+
+    // Cerrar al hacer clic fuera del modal
+    document.getElementById('modalEliminar').addEventListener('click', function(e) {
+        if (e.target === this) cerrarModal();
+    });
+
+    // Buscador
     document.getElementById('buscador').addEventListener('input', function(e) {
         const filtro = e.target.value.toLowerCase();
-        const filas = document.querySelectorAll('#tabla-body tr');
-        filas.forEach(fila => {
-            const texto = fila.textContent.toLowerCase();
-            fila.style.display = texto.includes(filtro) ? '' : 'none';
+        document.querySelectorAll('#tabla-body tr').forEach(fila => {
+            fila.style.display = fila.textContent.toLowerCase().includes(filtro) ? '' : 'none';
         });
     });
 </script>
