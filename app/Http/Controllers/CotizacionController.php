@@ -96,9 +96,11 @@ class CotizacionController extends Controller
 
         $total = $subtotal + $total_iva;
 
-        // Corrige la secuencia del ID en PostgreSQL
+        // Corrige la secuencia del ID en PostgreSQL solo si hay registros
         $maxId = Cotizacion::max('id') ?? 0;
-        DB::statement("SELECT setval('cotizaciones_id_seq', $maxId)");
+        if ($maxId > 0) {
+            DB::statement("SELECT setval('cotizaciones_id_seq', $maxId)");
+        }
 
         $cotizacion = Cotizacion::create([
             'consecutivo' => Cotizacion::generarConsecutivo(),
@@ -109,9 +111,11 @@ class CotizacionController extends Controller
             'observacion' => $request->observacion,
         ]);
 
-        // Corrige secuencia de cotizacion_items
+        // Corrige secuencia de cotizacion_items solo si hay registros
         $maxItemId = CotizacionItem::max('id') ?? 0;
-        DB::statement("SELECT setval('cotizacion_items_id_seq', $maxItemId)");
+        if ($maxItemId > 0) {
+            DB::statement("SELECT setval('cotizacion_items_id_seq', $maxItemId)");
+        }
 
         foreach ($request->items as $item) {
             $producto = Producto::find($item['producto_id']);
@@ -149,9 +153,11 @@ class CotizacionController extends Controller
             }
         }
 
-        // Corrige secuencia de facturas
+        // Corrige secuencia de facturas solo si hay registros
         $maxFacturaId = Factura::max('id') ?? 0;
-        DB::statement("SELECT setval('facturas_id_seq', $maxFacturaId)");
+        if ($maxFacturaId > 0) {
+            DB::statement("SELECT setval('facturas_id_seq', $maxFacturaId)");
+        }
 
         $factura = Factura::create([
             'consecutivo'    => Factura::generarConsecutivo(),
@@ -164,9 +170,11 @@ class CotizacionController extends Controller
             'observacion'    => $cotizacion->observacion,
         ]);
 
-        // Corrige secuencia de factura_items
+        // Corrige secuencia de factura_items solo si hay registros
         $maxFacturaItemId = FacturaItem::max('id') ?? 0;
-        DB::statement("SELECT setval('factura_items_id_seq', $maxFacturaItemId)");
+        if ($maxFacturaItemId > 0) {
+            DB::statement("SELECT setval('factura_items_id_seq', $maxFacturaItemId)");
+        }
 
         foreach ($cotizacion->items as $item) {
             FacturaItem::create([

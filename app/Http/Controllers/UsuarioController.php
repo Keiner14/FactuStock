@@ -10,10 +10,10 @@ use Illuminate\Support\Facades\DB;
 class UsuarioController extends Controller
 {
     public function index()
-{
-    $usuarios = User::orderBy('id', 'asc')->get();
-    return view('usuarios.index', compact('usuarios'));
-}
+    {
+        $usuarios = User::orderBy('id', 'asc')->get();
+        return view('usuarios.index', compact('usuarios'));
+    }
 
     public function create()
     {
@@ -38,9 +38,11 @@ class UsuarioController extends Controller
             ? User::permisosDisponibles()
             : ($request->permisos ?? []);
 
-        // Corrige la secuencia del ID en PostgreSQL
+        // Corrige la secuencia del ID en PostgreSQL solo si hay registros
         $maxId = User::max('id') ?? 0;
-        DB::statement("SELECT setval('users_id_seq', $maxId)");
+        if ($maxId > 0) {
+            DB::statement("SELECT setval('users_id_seq', $maxId)");
+        }
 
         User::create([
             'name'      => $request->name,

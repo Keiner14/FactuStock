@@ -28,9 +28,11 @@ class ClienteController extends Controller
             'direccion' => 'required|string|max:255',
         ]);
 
-        // Corrige la secuencia del ID en PostgreSQL
+        // Corrige la secuencia del ID en PostgreSQL solo si hay registros
         $maxId = Cliente::max('id') ?? 0;
-        DB::statement("SELECT setval('clientes_id_seq', $maxId)");
+        if ($maxId > 0) {
+            DB::statement("SELECT setval('clientes_id_seq', $maxId)");
+        }
 
         Cliente::create($request->all());
 

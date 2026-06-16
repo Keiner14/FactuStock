@@ -107,9 +107,11 @@ class FacturaController extends Controller
 
         $total = $subtotal + $total_iva;
 
-        // Corrige la secuencia del ID en PostgreSQL
+        // Corrige la secuencia del ID en PostgreSQL solo si hay registros
         $maxId = Factura::max('id') ?? 0;
-        DB::statement("SELECT setval('facturas_id_seq', $maxId)");
+        if ($maxId > 0) {
+            DB::statement("SELECT setval('facturas_id_seq', $maxId)");
+        }
 
         $factura = Factura::create([
             'consecutivo'    => Factura::generarConsecutivo(),
@@ -121,9 +123,11 @@ class FacturaController extends Controller
             'observacion'    => $request->observacion,
         ]);
 
-        // Corrige secuencia de factura_items
+        // Corrige secuencia de factura_items solo si hay registros
         $maxItemId = FacturaItem::max('id') ?? 0;
-        DB::statement("SELECT setval('factura_items_id_seq', $maxItemId)");
+        if ($maxItemId > 0) {
+            DB::statement("SELECT setval('factura_items_id_seq', $maxItemId)");
+        }
 
         foreach ($request->items as $item) {
             $producto = Producto::find($item['producto_id']);

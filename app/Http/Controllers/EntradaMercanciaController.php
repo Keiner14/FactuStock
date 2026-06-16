@@ -74,9 +74,11 @@ class EntradaMercanciaController extends Controller
             'costo_promedio' => $costo_promedio_nuevo,
         ]);
 
-        // Corrige la secuencia del ID en PostgreSQL
+        // Corrige la secuencia del ID en PostgreSQL solo si hay registros
         $maxId = EntradaMercancia::max('id') ?? 0;
-        DB::statement("SELECT setval('entrada_mercancias_id_seq', $maxId)");
+        if ($maxId > 0) {
+            DB::statement("SELECT setval('entrada_mercancias_id_seq', $maxId)");
+        }
 
         // Registrar la entrada
         EntradaMercancia::create([
