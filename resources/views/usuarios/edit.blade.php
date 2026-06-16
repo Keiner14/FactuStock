@@ -130,6 +130,16 @@
         flex-shrink: 0;
     }
 
+    .permiso-item input[type="checkbox"]:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .permiso-item:has(input:disabled) {
+        opacity: 0.75;
+        cursor: not-allowed;
+    }
+
     .permiso-info { flex: 1; }
 
     .permiso-nombre {
@@ -360,25 +370,48 @@
 </form>
 
 <script>
-    function marcarTodos(estado) {
-        document.querySelectorAll('.check-permiso').forEach(c => c.checked = estado);
-    }
-
-    // Cuando es administrador, marca todos los permisos y muestra aviso
     const rolSelect = document.getElementById('rolSelect');
     const avisoAdmin = document.getElementById('avisoAdmin');
+    const checkboxes = document.querySelectorAll('.check-permiso');
 
-    function actualizarSegunRol() {
-        if (rolSelect.value === 'administrador') {
-            marcarTodos(true);
+    const permisosVendedor = ['clientes', 'cotizaciones', 'facturas'];
+    const permisosActuales = @json($permisosUsuario);
+
+    function marcarTodos(estado) {
+        if (rolSelect.value === 'administrador') return;
+        checkboxes.forEach(c => {
+            c.checked = estado;
+            c.disabled = false;
+        });
+    }
+
+    function actualizarSegunRol(esInicial = false) {
+        const rol = rolSelect.value;
+
+        if (rol === 'administrador') {
+            checkboxes.forEach(c => {
+                c.checked = true;
+                c.disabled = true;
+            });
             avisoAdmin.style.display = 'block';
-        } else {
+
+        } else if (rol === 'vendedor') {
+            checkboxes.forEach(c => {
+                if (esInicial) {
+                    // Al cargar: mantener permisos guardados en BD
+                    c.checked = permisosActuales.includes(c.value);
+                } else {
+                    // Cambio manual de rol: resetear a defaults de vendedor
+                    c.checked = permisosVendedor.includes(c.value);
+                }
+                c.disabled = false;
+            });
             avisoAdmin.style.display = 'none';
         }
     }
 
-    rolSelect.addEventListener('change', actualizarSegunRol);
-    actualizarSegunRol(); // ejecutar al cargar
+    rolSelect.addEventListener('change', () => actualizarSegunRol(false));
+    actualizarSegunRol(true);
 </script>
 
 @endsection
