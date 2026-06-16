@@ -9,6 +9,7 @@ use App\Models\Producto;
 use App\Models\Factura;
 use App\Models\FacturaItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 class CotizacionController extends Controller
@@ -95,6 +96,10 @@ class CotizacionController extends Controller
 
         $total = $subtotal + $total_iva;
 
+        // Corrige la secuencia del ID en PostgreSQL
+        $maxId = Cotizacion::max('id') ?? 0;
+        DB::statement("SELECT setval('cotizaciones_id_seq', $maxId)");
+
         $cotizacion = Cotizacion::create([
             'consecutivo' => Cotizacion::generarConsecutivo(),
             'cliente_id'  => $request->cliente_id,
@@ -103,6 +108,10 @@ class CotizacionController extends Controller
             'total'       => $total,
             'observacion' => $request->observacion,
         ]);
+
+        // Corrige secuencia de cotizacion_items
+        $maxItemId = CotizacionItem::max('id') ?? 0;
+        DB::statement("SELECT setval('cotizacion_items_id_seq', $maxItemId)");
 
         foreach ($request->items as $item) {
             $producto = Producto::find($item['producto_id']);
@@ -140,6 +149,10 @@ class CotizacionController extends Controller
             }
         }
 
+        // Corrige secuencia de facturas
+        $maxFacturaId = Factura::max('id') ?? 0;
+        DB::statement("SELECT setval('facturas_id_seq', $maxFacturaId)");
+
         $factura = Factura::create([
             'consecutivo'    => Factura::generarConsecutivo(),
             'numero_factura' => Factura::generarNumero(),
@@ -150,6 +163,10 @@ class CotizacionController extends Controller
             'total'          => $cotizacion->total,
             'observacion'    => $cotizacion->observacion,
         ]);
+
+        // Corrige secuencia de factura_items
+        $maxFacturaItemId = FacturaItem::max('id') ?? 0;
+        DB::statement("SELECT setval('factura_items_id_seq', $maxFacturaItemId)");
 
         foreach ($cotizacion->items as $item) {
             FacturaItem::create([

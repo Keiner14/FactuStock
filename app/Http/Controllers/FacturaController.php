@@ -7,17 +7,17 @@ use App\Models\FacturaItem;
 use App\Models\Cliente;
 use App\Models\Producto;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
+
 class FacturaController extends Controller
 {
-    // Muestra la lista de facturas
     public function index()
     {
         $facturas = Factura::with('cliente')->orderBy('created_at', 'desc')->get();
         return view('facturas.index', compact('facturas'));
     }
 
-    // Muestra el formulario para crear una factura directa
     public function create()
     {
         $consecutivo = Factura::generarConsecutivo();
@@ -25,7 +25,6 @@ class FacturaController extends Controller
         return view('facturas.create', compact('consecutivo', 'numero'));
     }
 
-    // Busca un cliente por cédula o nombre via AJAX
     public function buscarCliente(Request $request)
     {
         $busqueda = $request->busqueda;
@@ -47,7 +46,6 @@ class FacturaController extends Controller
         return response()->json(['encontrado' => false]);
     }
 
-    // Busca un producto por código o nombre via AJAX
     public function buscarProducto(Request $request)
     {
         $busqueda = $request->busqueda;
@@ -69,7 +67,6 @@ class FacturaController extends Controller
         return response()->json(['encontrado' => false]);
     }
 
-    // Guarda la factura y descuenta el stock
     public function store(Request $request)
     {
         $request->validate([
@@ -86,7 +83,7 @@ class FacturaController extends Controller
             'items.*.precio_unitario.min' => 'El precio no puede ser negativo.',
         ]);
 
-        // Verificar stock de todos los items antes de guardar
+        // Verificar stock antes de guardar
         foreach ($request->items as $item) {
             $producto = Producto::find($item['producto_id']);
             if ($producto->stock < $item['cantidad']) {
@@ -101,16 +98,19 @@ class FacturaController extends Controller
         $total_iva = 0;
 
         foreach ($request->items as $item) {
-            $producto  = Producto::find($item['producto_id']);
-            $sub       = $item['cantidad'] * $item['precio_unitario'];
-            $iva_item  = $sub * ($producto->iva / 100);
-            $subtotal += $sub;
+            $producto   = Producto::find($item['producto_id']);
+            $sub        = $item['cantidad'] * $item['precio_unitario'];
+            $iva_item   = $sub * ($producto->iva / 100);
+            $subtotal  += $sub;
             $total_iva += $iva_item;
         }
 
         $total = $subtotal + $total_iva;
 
-        // Crear la factura
+        // Corrige la secuencia del ID en PostgreSQL
+        $maxId = Factura::max('id') ?? 0;
+        DB::statement("SELECT setval('facturas_id_seq', $maxId)");
+
         $factura = Factura::create([
             'consecutivo'    => Factura::generarConsecutivo(),
             'numero_factura' => Factura::generarNumero(),
@@ -121,7 +121,10 @@ class FacturaController extends Controller
             'observacion'    => $request->observacion,
         ]);
 
-        // Guardar items y descontar stock
+        // Corrige secuencia de factura_items
+        $maxItemId = FacturaItem::max('id') ?? 0;
+        DB::statement("SELECT setval('factura_items_id_seq', $maxItemId)");
+
         foreach ($request->items as $item) {
             $producto = Producto::find($item['producto_id']);
             $sub      = $item['cantidad'] * $item['precio_unitario'];
@@ -137,25 +140,22 @@ class FacturaController extends Controller
                 'subtotal'        => $sub,
             ]);
 
-            // Descontar stock del producto
             $producto->update(['stock' => $producto->stock - $item['cantidad']]);
         }
 
         return redirect()->route('facturas.show', $factura)->with('success', 'Factura creada correctamente.');
     }
 
-    // Muestra el detalle de una factura
     public function show(Factura $factura)
     {
         $factura->load('cliente', 'items');
         return view('facturas.show', compact('factura'));
     }
 
-    // Genera el PDF de la factura
-public function pdf(Factura $factura)
-{
-    $factura->load('cliente', 'items');
-    $pdf = Pdf::loadView('facturas.pdf', compact('factura'));
-    return $pdf->download('factura-' . $factura->numero_factura . '.pdf');
-}
+    public function pdf(Factura $factura)
+    {
+        $factura->load('cliente', 'items');
+        $pdf = Pdf::loadView('facturas.pdf', compact('factura'));
+        return $pdf->download('factura-' . $factura->numero_factura . '.pdf');
+    }
 }

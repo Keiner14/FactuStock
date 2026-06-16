@@ -5,24 +5,22 @@ namespace App\Http\Controllers;
 use App\Models\EntradaMercancia;
 use App\Models\Producto;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class EntradaMercanciaController extends Controller
 {
-    // Muestra el historial de todas las entradas
     public function index()
     {
         $entradas = EntradaMercancia::orderBy('created_at', 'desc')->get();
         return view('entradas.index', compact('entradas'));
     }
 
-    // Muestra el formulario para registrar una entrada
     public function create()
     {
         $consecutivo = EntradaMercancia::generarConsecutivo();
         return view('entradas.create', compact('consecutivo'));
     }
 
-    // Busca un producto por codigo via AJAX
     public function buscarProducto(Request $request)
     {
         $producto = Producto::where('codigo', $request->codigo)->first();
@@ -40,7 +38,6 @@ class EntradaMercanciaController extends Controller
         return response()->json(['encontrado' => false]);
     }
 
-    // Guarda la entrada de mercancia y actualiza el stock y costo promedio
     public function store(Request $request)
     {
         $request->validate([
@@ -77,19 +74,23 @@ class EntradaMercanciaController extends Controller
             'costo_promedio' => $costo_promedio_nuevo,
         ]);
 
-       // Registrar la entrada
-EntradaMercancia::create([
-    'consecutivo'         => EntradaMercancia::generarConsecutivo(),
-    'producto_id'         => $producto->id,
-    'codigo_producto'     => $producto->codigo,
-    'nombre_producto'     => $producto->nombre,
-    'cantidad'            => $request->cantidad,
-    'costo_unitario'      => $request->costo_unitario,
-    'costo_promedio_nuevo'=> $costo_promedio_nuevo,
-    'stock_anterior'      => $stock_anterior,
-    'stock_nuevo'         => $stock_nuevo,
-    'observacion'         => $request->observacion,
-]);
+        // Corrige la secuencia del ID en PostgreSQL
+        $maxId = EntradaMercancia::max('id') ?? 0;
+        DB::statement("SELECT setval('entrada_mercancias_id_seq', $maxId)");
+
+        // Registrar la entrada
+        EntradaMercancia::create([
+            'consecutivo'          => EntradaMercancia::generarConsecutivo(),
+            'producto_id'          => $producto->id,
+            'codigo_producto'      => $producto->codigo,
+            'nombre_producto'      => $producto->nombre,
+            'cantidad'             => $request->cantidad,
+            'costo_unitario'       => $request->costo_unitario,
+            'costo_promedio_nuevo' => $costo_promedio_nuevo,
+            'stock_anterior'       => $stock_anterior,
+            'stock_nuevo'          => $stock_nuevo,
+            'observacion'          => $request->observacion,
+        ]);
 
         return redirect()->route('entradas.index')->with('success', 'Entrada registrada correctamente. Stock y costo promedio actualizados.');
     }

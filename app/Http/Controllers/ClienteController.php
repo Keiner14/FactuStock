@@ -4,14 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\Cliente;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ClienteController extends Controller
 {
-public function index()
-{
-    $clientes = Cliente::all();
-    return view('clientes.index', compact('clientes'));
-}
+    public function index()
+    {
+        $clientes = Cliente::all();
+        return view('clientes.index', compact('clientes'));
+    }
+
     public function create()
     {
         return view('clientes.create');
@@ -25,6 +27,10 @@ public function index()
             'celular'   => 'required|string|max:20',
             'direccion' => 'required|string|max:255',
         ]);
+
+        // Corrige la secuencia del ID en PostgreSQL
+        $maxId = Cliente::max('id') ?? 0;
+        DB::statement("SELECT setval('clientes_id_seq', $maxId)");
 
         Cliente::create($request->all());
 
