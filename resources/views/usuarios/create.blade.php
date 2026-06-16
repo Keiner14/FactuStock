@@ -363,15 +363,27 @@
         document.querySelectorAll('.check-permiso').forEach(c => c.checked = estado);
     }
 
-    // Cuando es administrador, marca todos los permisos y muestra aviso
     const rolSelect = document.getElementById('rolSelect');
     const avisoAdmin = document.getElementById('avisoAdmin');
+
+    // Permisos por defecto para un vendedor nuevo
+    const permisosVendedorPorDefecto = ['clientes', 'cotizaciones', 'facturas'];
+
+    function marcarPermisosVendedor() {
+        document.querySelectorAll('.check-permiso').forEach(c => {
+            c.checked = permisosVendedorPorDefecto.includes(c.value);
+        });
+    }
 
     function actualizarSegunRol() {
         if (rolSelect.value === 'administrador') {
             marcarTodos(true);
             avisoAdmin.style.display = 'block';
+        } else if (rolSelect.value === 'vendedor') {
+            marcarPermisosVendedor();
+            avisoAdmin.style.display = 'none';
         } else {
+            marcarTodos(false);
             avisoAdmin.style.display = 'none';
         }
     }
