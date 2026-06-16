@@ -33,7 +33,7 @@
  
         h1 {
             font-size: 1.3rem;
-            color: #0C447C;
+            color: #378ADD;
             text-align: center;
             margin-bottom: 1.5rem;
         }
@@ -46,7 +46,8 @@
         }
  
         input[type="email"],
-        input[type="password"] {
+        input[type="password"],
+        input[type="text"] {
             width: 100%;
             height: 44px;
             border: 1.5px solid #D5D9E0;
@@ -67,12 +68,12 @@
             margin-bottom: 1.25rem;
         }
  
-        .meta a { color: #185FA5; text-decoration: none; }
+        .meta a { color: #378ADD; text-decoration: none; }
  
         button {
             width: 100%;
             height: 46px;
-            background: #185FA5;
+            background: #378ADD;
             color: #fff;
             border: none;
             border-radius: 8px;
@@ -81,7 +82,7 @@
             cursor: pointer;
         }
  
-        button:hover { background: #0C447C; }
+        button:hover { background: #2a7bc8; }
  
         .error {
             background: #FCEBEB;
@@ -99,7 +100,17 @@
             margin-top: 1.25rem;
         }
  
-        .footer a { color: #185FA5; text-decoration: none; }
+        .footer a { color: #378ADD; text-decoration: none; }
+
+        /* Oculta el campo señuelo usado para bloquear el autocompletado */
+        .campo-trampa {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+            pointer-events: none;
+            left: -9999px;
+        }
     </style>
 </head>
 <body>
@@ -118,14 +129,34 @@
         </div>
     @endif
  
-    <form method="POST" action="{{ route('login') }}">
+    <form method="POST" action="{{ route('login') }}" autocomplete="off">
         @csrf
+
+        {{-- Campos señuelo: hacen que Chrome guarde sus datos aquí en vez de en los campos reales --}}
+        <input type="text" name="fake_user" class="campo-trampa" tabindex="-1" autocomplete="off">
+        <input type="password" name="fake_pass" class="campo-trampa" tabindex="-1" autocomplete="off">
  
         <label for="email">Correo electrónico</label>
-        <input type="email" id="email" name="email" value="{{ old('email') }}" placeholder="tu@correo.com" autofocus>
+        <input
+            type="email"
+            id="email"
+            name="email"
+            value="{{ old('email') }}"
+            placeholder="tu@correo.com"
+            autocomplete="nope"
+            autofocus
+            readonly
+            onfocus="this.removeAttribute('readonly')"
+        >
  
         <label for="password">Contraseña</label>
-        <input type="password" id="password" name="password" placeholder="••••••••">
+        <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="••••••••"
+            autocomplete="new-password"
+        >
  
         <div class="meta">
             <label style="display:flex;align-items:center;gap:6px;cursor:pointer;">
