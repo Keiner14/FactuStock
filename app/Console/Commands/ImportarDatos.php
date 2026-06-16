@@ -44,12 +44,16 @@ class ImportarDatos extends Command
     private function importarTabla(string $nombre, string $modelo, array $registros)
     {
         $tabla = (new $modelo)->getTable();
+        $columnasReales = DB::getSchemaBuilder()->getColumnListing($tabla);
         $insertados = 0;
 
         foreach ($registros as $registro) {
             $existe = DB::table($tabla)->where('id', $registro['id'])->exists();
 
             if (!$existe) {
+                // Quitar cualquier campo que no exista realmente en la tabla destino
+                $registro = array_intersect_key_safe($registro, $columnasReales);
+
                 // Convertir cualquier valor array (ej: columnas JSON) a string JSON
                 foreach ($registro as $campo => $valor) {
                     if (is_array($valor)) {
@@ -64,4 +68,15 @@ class ImportarDatos extends Command
 
         $this->line("- {$nombre}: {$insertados} de " . count($registros) . " insertados");
     }
+}
+
+function array_intersect_key_safe(array $registro, array $columnasReales): array
+{
+    $resultado = [];
+    foreach ($registro as $campo => $valor) {
+        if (in_array($campo, $columnasReales)) {
+            $resultado[$campo] = $valor;
+        }
+    }
+    return $resultado;
 }
