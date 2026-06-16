@@ -3,7 +3,6 @@
 @section('content')
 
 <style>
-    /* ===== BARRA DE BÚSQUEDA + BOTÓN ===== */
     .top-bar {
         display: flex;
         gap: 0.8rem;
@@ -31,10 +30,7 @@
         color: #333;
     }
 
-    .search-bar .icon {
-        color: #8A93A2;
-        font-size: 1rem;
-    }
+    .search-bar .icon { color: #8A93A2; font-size: 1rem; }
 
     .btn-nuevo {
         background: #378ADD;
@@ -50,7 +46,6 @@
 
     .btn-nuevo:hover { background: #2a7bc8; color: white; }
 
-    /* ===== TABLA ===== */
     .tabla-card {
         background: white;
         border-radius: 12px;
@@ -93,12 +88,7 @@
         vertical-align: middle;
     }
 
-    /* ===== AVATAR CLIENTE ===== */
-    .cliente-cell {
-        display: flex;
-        align-items: center;
-        gap: 0.7rem;
-    }
+    .cliente-cell { display: flex; align-items: center; gap: 0.7rem; }
 
     .avatar {
         width: 36px;
@@ -114,17 +104,9 @@
         flex-shrink: 0;
     }
 
-    .cliente-name {
-        font-weight: 600;
-        color: #2C3E50;
-    }
+    .cliente-name { font-weight: 600; color: #2C3E50; }
+    .cliente-id { font-size: 0.7rem; color: #8A93A2; }
 
-    .cliente-id {
-        font-size: 0.7rem;
-        color: #8A93A2;
-    }
-
-    /* ===== CONTACTO ===== */
     .contacto-info {
         display: flex;
         align-items: center;
@@ -132,12 +114,8 @@
         color: #555;
     }
 
-    .contacto-info .icon-mini {
-        color: #378ADD;
-        font-size: 0.85rem;
-    }
+    .contacto-info .icon-mini { color: #378ADD; font-size: 0.85rem; }
 
-    /* ===== BOTONES DE ACCIÓN ===== */
     .acciones-cell {
         display: flex;
         gap: 0.4rem;
@@ -159,16 +137,8 @@
     }
 
     .btn-accion:hover { opacity: 0.85; }
-
-    .btn-editar {
-        background: #f39c12;
-        color: white;
-    }
-
-    .btn-eliminar {
-        background: #e74c3c;
-        color: white;
-    }
+    .btn-editar { background: #f39c12; color: white; }
+    .btn-eliminar { background: #e74c3c; color: white; }
 
     .tabla-empty {
         padding: 2.5rem;
@@ -176,9 +146,102 @@
         color: #8A93A2;
         font-size: 0.85rem;
     }
+
+    /* ===== MODAL ===== */
+    .modal-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.45);
+        z-index: 9999;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .modal-overlay.active { display: flex; }
+
+    .modal-box {
+        background: white;
+        border-radius: 16px;
+        padding: 2rem;
+        max-width: 400px;
+        width: 90%;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+        text-align: center;
+        animation: modalIn 0.2s ease;
+    }
+
+    @keyframes modalIn {
+        from { transform: scale(0.92); opacity: 0; }
+        to   { transform: scale(1);    opacity: 1; }
+    }
+
+    .modal-icono {
+        width: 64px;
+        height: 64px;
+        background: #fdecea;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.8rem;
+        margin: 0 auto 1.2rem;
+    }
+
+    .modal-titulo {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #2C3E50;
+        margin-bottom: 0.5rem;
+    }
+
+    .modal-desc {
+        font-size: 0.85rem;
+        color: #8A93A2;
+        margin-bottom: 1.5rem;
+        line-height: 1.5;
+    }
+
+    .modal-nombre { color: #e74c3c; font-weight: 600; }
+
+    .modal-btns {
+        display: flex;
+        gap: 0.75rem;
+        justify-content: center;
+    }
+
+    .btn-modal-cancelar {
+        flex: 1;
+        padding: 0.65rem;
+        border-radius: 8px;
+        border: 1.5px solid #D5D9E0;
+        background: white;
+        color: #4F5869;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: border-color 0.15s;
+    }
+
+    .btn-modal-cancelar:hover { border-color: #378ADD; color: #378ADD; }
+
+    .btn-modal-eliminar {
+        flex: 1;
+        padding: 0.65rem;
+        border-radius: 8px;
+        border: none;
+        background: #e74c3c;
+        color: white;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.15s;
+    }
+
+    .btn-modal-eliminar:hover { background: #c0392b; }
 </style>
 
-{{-- ===== BARRA DE BÚSQUEDA + BOTÓN NUEVO ===== --}}
+{{-- BARRA --}}
 <div class="top-bar">
     <div class="search-bar">
         <span class="icon">🔍</span>
@@ -187,7 +250,7 @@
     <a href="{{ route('clientes.create') }}" class="btn-nuevo">＋ Nuevo Cliente</a>
 </div>
 
-{{-- ===== TABLA ===== --}}
+{{-- TABLA --}}
 <div class="tabla-card">
     <table>
         <thead>
@@ -234,11 +297,17 @@
                         <a href="{{ route('clientes.edit', $cliente) }}" class="btn-accion btn-editar">
                             ✏️ Editar
                         </a>
-                        <form method="POST" action="{{ route('clientes.destroy', $cliente) }}" style="display:inline" onsubmit="return confirm('¿Eliminar al cliente {{ $cliente->nombre }}?')">
+                        <form id="form-eliminar-{{ $cliente->id }}"
+                              method="POST"
+                              action="{{ route('clientes.destroy', $cliente) }}"
+                              style="display:none;">
                             @csrf
                             @method('DELETE')
-                            <button class="btn-accion btn-eliminar">🗑️ Eliminar</button>
                         </form>
+                        <button class="btn-accion btn-eliminar"
+                                onclick="abrirModal({{ $cliente->id }}, '{{ addslashes($cliente->nombre) }}')">
+                            🗑️ Eliminar
+                        </button>
                     </div>
                 </td>
             </tr>
@@ -251,17 +320,53 @@
     </table>
 </div>
 
+{{-- MODAL --}}
+<div class="modal-overlay" id="modalEliminar">
+    <div class="modal-box">
+        <div class="modal-icono">🗑️</div>
+        <div class="modal-titulo">¿Eliminar cliente?</div>
+        <div class="modal-desc">
+            Estás a punto de eliminar a <span class="modal-nombre" id="modalNombre"></span>.<br>
+            Esta acción no se puede deshacer.
+        </div>
+        <div class="modal-btns">
+            <button class="btn-modal-cancelar" onclick="cerrarModal()">Cancelar</button>
+            <button class="btn-modal-eliminar" onclick="confirmarEliminar()">Sí, eliminar</button>
+        </div>
+    </div>
+</div>
+
 <script>
-    // Buscador en tiempo real (nombre, cédula, celular, dirección)
+    let formIdActual = null;
+
+    function abrirModal(id, nombre) {
+        formIdActual = id;
+        document.getElementById('modalNombre').textContent = nombre;
+        document.getElementById('modalEliminar').classList.add('active');
+    }
+
+    function cerrarModal() {
+        formIdActual = null;
+        document.getElementById('modalEliminar').classList.remove('active');
+    }
+
+    function confirmarEliminar() {
+        if (formIdActual) {
+            document.getElementById('form-eliminar-' + formIdActual).submit();
+        }
+    }
+
+    document.getElementById('modalEliminar').addEventListener('click', function(e) {
+        if (e.target === this) cerrarModal();
+    });
+
     document.getElementById('buscador').addEventListener('input', function(e) {
         const filtro = e.target.value.toLowerCase().trim();
-        const filas = document.querySelectorAll('#tabla-body tr');
-        filas.forEach(fila => {
+        document.querySelectorAll('#tabla-body tr').forEach(fila => {
             const celdas = fila.querySelectorAll('td[data-search]');
             let coincide = false;
             celdas.forEach(celda => {
-                const valor = (celda.dataset.search || '').toLowerCase();
-                if (valor.includes(filtro)) coincide = true;
+                if ((celda.dataset.search || '').toLowerCase().includes(filtro)) coincide = true;
             });
             fila.style.display = coincide ? '' : 'none';
         });
