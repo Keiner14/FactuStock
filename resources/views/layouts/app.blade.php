@@ -115,7 +115,7 @@
         <div class="seccion">Principal</div>
         <a href="{{ url('dashboard') }}">🏠 Inicio</a>
 
-        {{-- ===== GESTIÓN ===== --}}
+        {{-- ===== GESTIONAR ===== --}}
         @if(auth()->user()->tienePermiso('usuarios') || auth()->user()->tienePermiso('clientes'))
             <div class="seccion">Gestión</div>
 
