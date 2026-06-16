@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FactuStock — Iniciar Sesión</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/factustock-logo.png') }}">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
  
@@ -155,7 +156,7 @@
             id="password"
             name="password"
             placeholder="••••••••"
-            autocomplete="new-password"
+            autocomplete="current-password"
         >
  
         <div class="meta">
