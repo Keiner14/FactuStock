@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 class UsuarioController extends Controller
 {
@@ -22,21 +23,24 @@ class UsuarioController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name'      => 'required|string|max:255',
-            'apellidos' => 'required|string|max:255',
-            'telefono'  => 'required|string|max:20',
-            'direccion' => 'required|string|max:255',
-            'email'     => 'required|email|unique:users,email',
-            'password'  => 'required|min:8|confirmed',
-            'rol'       => 'required|in:administrador,vendedor',
-            'permisos'  => 'nullable|array',
+            'name'       => 'required|string|max:255',
+            'apellidos'  => 'required|string|max:255',
+            'telefono'   => 'required|string|max:20',
+            'direccion'  => 'required|string|max:255',
+            'email'      => 'required|email|unique:users,email',
+            'password'   => 'required|min:8|confirmed',
+            'rol'        => 'required|in:administrador,vendedor',
+            'permisos'   => 'nullable|array',
             'permisos.*' => 'string|in:' . implode(',', User::permisosDisponibles()),
         ]);
 
-        // El administrador tiene todos los permisos automáticamente
         $permisos = $request->rol === 'administrador'
             ? User::permisosDisponibles()
             : ($request->permisos ?? []);
+
+        // Corrige la secuencia del ID en PostgreSQL
+        $maxId = User::max('id') ?? 0;
+        DB::statement("SELECT setval('users_id_seq', $maxId)");
 
         User::create([
             'name'      => $request->name,
@@ -60,17 +64,16 @@ class UsuarioController extends Controller
     public function update(Request $request, User $usuario)
     {
         $request->validate([
-            'name'      => 'required|string|max:255',
-            'apellidos' => 'required|string|max:255',
-            'telefono'  => 'required|string|max:20',
-            'direccion' => 'required|string|max:255',
-            'email'     => 'required|email|unique:users,email,' . $usuario->id,
-            'rol'       => 'required|in:administrador,vendedor',
-            'permisos'  => 'nullable|array',
+            'name'       => 'required|string|max:255',
+            'apellidos'  => 'required|string|max:255',
+            'telefono'   => 'required|string|max:20',
+            'direccion'  => 'required|string|max:255',
+            'email'      => 'required|email|unique:users,email,' . $usuario->id,
+            'rol'        => 'required|in:administrador,vendedor',
+            'permisos'   => 'nullable|array',
             'permisos.*' => 'string|in:' . implode(',', User::permisosDisponibles()),
         ]);
 
-        // El administrador tiene todos los permisos automáticamente
         $permisos = $request->rol === 'administrador'
             ? User::permisosDisponibles()
             : ($request->permisos ?? []);
