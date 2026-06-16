@@ -3,6 +3,7 @@
 use App\Http\Controllers\CotizacionController;
 use App\Http\Controllers\FacturaController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\InformeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\ClienteController;
@@ -64,6 +65,14 @@ Route::middleware(['auth'])->group(function () {
         Route::get('facturas/{factura}/pdf', [FacturaController::class, 'pdf'])->name('facturas.pdf');
         Route::resource('facturas', FacturaController::class)->only(['index', 'create', 'store', 'show']);
     });
+
+    // ─── INFORMES ───────────────────────────────────────
+    Route::middleware('can:informe_facturacion')->group(function () {
+        Route::get('informes/facturacion', [InformeController::class, 'facturacion'])->name('informes.facturacion');
+        Route::get('informes/facturacion/pdf', [InformeController::class, 'facturacionPdf'])->name('informes.facturacion.pdf');
+        Route::get('informes/facturacion/excel', [InformeController::class, 'facturacionExcel'])->name('informes.facturacion.excel');
+    });
+
 });
 
 require __DIR__.'/auth.php';
