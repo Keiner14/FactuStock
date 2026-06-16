@@ -226,16 +226,11 @@
                 <label>Presentación</label>
                 <select name="categoria">
                     <option value="">Seleccionar...</option>
-                    <option value="und" {{ old('categoria', $producto->categoria) === 'und' ? 'selected' : '' }}>Unidad (und)</option>
-                    <option value="kg" {{ old('categoria', $producto->categoria) === 'kg' ? 'selected' : '' }}>Kilogramo (kg)</option>
-                    <option value="g" {{ old('categoria', $producto->categoria) === 'g' ? 'selected' : '' }}>Gramo (g)</option>
-                    <option value="lt" {{ old('categoria', $producto->categoria) === 'lt' ? 'selected' : '' }}>Litro (lt)</option>
-                    <option value="ml" {{ old('categoria', $producto->categoria) === 'ml' ? 'selected' : '' }}>Mililitro (ml)</option>
+                    <option value="und"  {{ old('categoria', $producto->categoria) === 'und'  ? 'selected' : '' }}>Unidad (und)</option>
                     <option value="caja" {{ old('categoria', $producto->categoria) === 'caja' ? 'selected' : '' }}>Caja</option>
-                    <option value="paquete" {{ old('categoria', $producto->categoria) === 'paquete' ? 'selected' : '' }}>Paquete</option>
-                    <option value="docena" {{ old('categoria', $producto->categoria) === 'docena' ? 'selected' : '' }}>Docena</option>
-                    <option value="metro" {{ old('categoria', $producto->categoria) === 'metro' ? 'selected' : '' }}>Metro (m)</option>
-                    <option value="par" {{ old('categoria', $producto->categoria) === 'par' ? 'selected' : '' }}>Par</option>
+                    <option value="kg"   {{ old('categoria', $producto->categoria) === 'kg'   ? 'selected' : '' }}>Kilo (kg)</option>
+                    <option value="mts"  {{ old('categoria', $producto->categoria) === 'mts'  ? 'selected' : '' }}>Metro (mts)</option>
+                    <option value="lt"   {{ old('categoria', $producto->categoria) === 'lt'   ? 'selected' : '' }}>Litro (lt)</option>
                 </select>
                 @error('categoria')
                     <span class="error-msg">{{ $message }}</span>
