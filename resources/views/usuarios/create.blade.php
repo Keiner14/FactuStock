@@ -56,7 +56,7 @@
     .form-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 0.9rem;
+        gap: 1.2rem; /* ✅ aumentado de 0.9rem */
     }
 
     .form-grid.full { grid-template-columns: 1fr; }
@@ -76,15 +76,16 @@
 
     .form-group input,
     .form-group select {
-        height: 38px;
+        height: 42px; /* ✅ aumentado de 38px */
         border: 1.5px solid #D5D9E0;
         border-radius: 7px;
-        padding: 0 0.7rem;
+        padding: 0 0.9rem; /* ✅ aumentado de 0.7rem */
         font-size: 0.85rem;
         color: #333;
         transition: border 0.15s, box-shadow 0.15s;
         outline: none;
         background: white;
+        margin-bottom: 0.2rem; /* ✅ agregado */
     }
 
     .form-group input:focus,
@@ -218,7 +219,6 @@
         margin-bottom: 0.8rem;
     }
 
-    /* Checkbox deshabilitado para admin */
     .permiso-item input[type="checkbox"]:disabled {
         opacity: 0.5;
         cursor: not-allowed;
@@ -301,7 +301,7 @@
                 </div>
             </div>
 
-            <div class="form-grid">
+            <div class="form-grid" style="margin-top:1rem;"> {{-- ✅ margen extra arriba --}}
                 <div class="form-group">
                     <label>Contraseña <span class="req">*</span></label>
                     <input type="password" name="password" required autocomplete="new-password">
@@ -314,7 +314,7 @@
                 </div>
             </div>
 
-            <div class="form-grid full" style="margin-top:0.5rem;">
+            <div class="form-grid full" style="margin-top:1rem;"> {{-- ✅ margen extra arriba --}}
                 <div class="form-group">
                     <label>Tipo de usuario <span class="req">*</span></label>
                     <select name="rol" id="rolSelect" required>
@@ -374,11 +374,9 @@
     const avisoAdmin = document.getElementById('avisoAdmin');
     const checkboxes = document.querySelectorAll('.check-permiso');
 
-    // Permisos por defecto para vendedor
     const permisosVendedor = ['clientes', 'cotizaciones', 'facturas'];
 
     function marcarTodos(estado) {
-        // Solo funciona si no es admin
         if (rolSelect.value === 'administrador') return;
         checkboxes.forEach(c => {
             c.checked = estado;
@@ -390,7 +388,6 @@
         const rol = rolSelect.value;
 
         if (rol === 'administrador') {
-            // Marcar todos y bloquear edición
             checkboxes.forEach(c => {
                 c.checked = true;
                 c.disabled = true;
@@ -398,7 +395,6 @@
             avisoAdmin.style.display = 'block';
 
         } else if (rol === 'vendedor') {
-            // Solo marcar los 3 por defecto, resto desmarcado, todos editables
             checkboxes.forEach(c => {
                 c.checked = permisosVendedor.includes(c.value);
                 c.disabled = false;
@@ -406,7 +402,6 @@
             avisoAdmin.style.display = 'none';
 
         } else {
-            // Sin rol: todo limpio
             checkboxes.forEach(c => {
                 c.checked = false;
                 c.disabled = false;
@@ -416,7 +411,7 @@
     }
 
     rolSelect.addEventListener('change', actualizarSegunRol);
-    actualizarSegunRol(); // ejecutar al cargar
+    actualizarSegunRol();
 </script>
 
 @endsection
