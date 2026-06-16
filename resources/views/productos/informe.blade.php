@@ -29,7 +29,7 @@
                 <th style="padding:0.75rem;">Nombre</th>
                 <th style="padding:0.75rem;">Código</th>
                 <th style="padding:0.75rem;">Categoría</th>
-                <th style="padding:0.75rem;">Precio de Venta</th>
+                <th style="padding:0.75rem;">Costo Unitario</th>
                 <th style="padding:0.75rem;">Stock</th>
                 <th style="padding:0.75rem;">Estado</th>
             </tr>
@@ -41,7 +41,7 @@
                 <td style="padding:0.75rem;">{{ $producto->nombre }}</td>
                 <td style="padding:0.75rem;">{{ $producto->codigo }}</td>
                 <td style="padding:0.75rem;">{{ $producto->categoria ?? 'Sin categoría' }}</td>
-                <td style="padding:0.75rem;">${{ number_format($producto->precio_venta, 2) }}</td>
+                <td style="padding:0.75rem;">${{ number_format($producto->costo_promedio, 2) }}</td>
                 <td style="padding:0.75rem;">{{ $producto->stock }}</td>
                 <td style="padding:0.75rem;">
                     @if($producto->stock > 10)
