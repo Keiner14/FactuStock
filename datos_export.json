@@ -11,6 +11,8 @@
             "permisos": null,
             "email": "factustock.app@gmail.com",
             "email_verified_at": null,
+            "password": "$2y$12$EQDxh93d0h8aHM9w1pdi6.IxkeqhM0LCukIGfkGx.Vrw1Qv5hk\/ba",
+            "remember_token": null,
             "created_at": "2026-05-08T03:04:52.000000Z",
             "updated_at": "2026-05-12T00:57:58.000000Z"
         },
@@ -29,6 +31,8 @@
             ],
             "email": "geraldingarcia0831@gmail.com",
             "email_verified_at": null,
+            "password": "$2y$12$3GMf0AqBYU\/P7SxwfXSx3.7qo2lV5UTO.4fQF7YZ1L9NxfogngYOS",
+            "remember_token": null,
             "created_at": "2026-05-12T00:54:32.000000Z",
             "updated_at": "2026-06-16T03:49:35.000000Z"
         },
@@ -43,6 +47,8 @@
             "permisos": null,
             "email": "keiinercalderon@gmail.com",
             "email_verified_at": null,
+            "password": "$2y$12$hK6sSVKm\/jbbCImUmlEjIO7a8cHD1U9gH9UpolZ.QuHl2tRtnMt32",
+            "remember_token": null,
             "created_at": "2026-05-12T00:57:23.000000Z",
             "updated_at": "2026-05-12T00:57:23.000000Z"
         },
@@ -61,6 +67,8 @@
             ],
             "email": "Anaacevedocantillo10@gmail.com",
             "email_verified_at": null,
+            "password": "$2y$12$wCZ52\/UC52AM0310ARnD4.UBZtaavfmv2mjekTqiweHQZPBplqKsS",
+            "remember_token": null,
             "created_at": "2026-05-12T01:42:15.000000Z",
             "updated_at": "2026-06-16T03:47:15.000000Z"
         },
@@ -79,6 +87,8 @@
             ],
             "email": "KEVINC@GMAIL.COM",
             "email_verified_at": null,
+            "password": "$2y$12$Ydk64zoBIwbsRuEKhi6W2uJH81haMYaL\/Oi8.RwjaLbvAqD7gies.",
+            "remember_token": null,
             "created_at": "2026-05-14T03:02:42.000000Z",
             "updated_at": "2026-06-16T03:47:15.000000Z"
         }

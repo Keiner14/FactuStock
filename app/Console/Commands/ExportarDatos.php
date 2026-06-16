@@ -20,7 +20,7 @@ class ExportarDatos extends Command
     public function handle()
     {
         $datos = [
-            'users'              => User::all()->toArray(),
+            'users'              => User::all()->makeVisible(['password', 'remember_token'])->toArray(),
             'clientes'           => Cliente::all()->toArray(),
             'productos'          => Producto::all()->toArray(),
             'cotizaciones'       => Cotizacion::all()->toArray(),
