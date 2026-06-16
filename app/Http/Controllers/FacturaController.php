@@ -55,12 +55,13 @@ class FacturaController extends Controller
 
         if ($producto) {
             return response()->json([
-                'encontrado' => true,
-                'id'         => $producto->id,
-                'nombre'     => $producto->nombre,
-                'codigo'     => $producto->codigo,
-                'iva'        => $producto->iva,
-                'stock'      => $producto->stock,
+                'encontrado'     => true,
+                'id'             => $producto->id,
+                'nombre'         => $producto->nombre,
+                'codigo'         => $producto->codigo,
+                'iva'            => $producto->iva,
+                'stock'          => $producto->stock,
+                'costo_promedio' => $producto->costo_promedio,
             ]);
         }
 
@@ -89,6 +90,16 @@ class FacturaController extends Controller
             if ($producto->stock < $item['cantidad']) {
                 return back()->withErrors([
                     'stock' => "Stock insuficiente para: {$producto->nombre}. Stock disponible: {$producto->stock} unidades."
+                ])->withInput();
+            }
+        }
+
+        // Verificar precio no menor al costo
+        foreach ($request->items as $item) {
+            $producto = Producto::find($item['producto_id']);
+            if ($item['precio_unitario'] < $producto->costo_promedio) {
+                return back()->withErrors([
+                    'precio' => "El precio de venta para '{$producto->nombre}' ($" . number_format($item['precio_unitario'], 2) . ") es menor al costo promedio ($" . number_format($producto->costo_promedio, 2) . ")."
                 ])->withInput();
             }
         }
