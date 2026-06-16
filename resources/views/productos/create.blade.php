@@ -22,9 +22,7 @@
         margin-top: 0.2rem;
     }
 
-    .form-container {
-        max-width: 850px;
-    }
+    .form-container { max-width: 850px; }
 
     .seccion-card {
         background: white;
@@ -81,6 +79,7 @@
         outline: none;
         background: white;
         font-family: inherit;
+        transition: border 0.15s, box-shadow 0.15s;
     }
 
     .form-group textarea {
@@ -101,25 +100,6 @@
         font-size: 0.7rem;
         color: #8A93A2;
         margin-top: 0.3rem;
-    }
-
-    .input-con-icono {
-        position: relative;
-        display: flex;
-        align-items: center;
-    }
-
-    .input-con-icono .icono-prefijo {
-        position: absolute;
-        left: 0.7rem;
-        color: #8A93A2;
-        font-size: 0.9rem;
-        pointer-events: none;
-    }
-
-    .input-con-icono input {
-        padding-left: 2.1rem !important;
-        width: 100%;
     }
 
     .form-actions {
@@ -180,7 +160,7 @@
 </style>
 
 <div class="form-header">
-    <h2>Crear nuevo producto</h2>
+    <h2>📦 Crear nuevo producto</h2>
     <div class="subtitle">Registra un nuevo producto en el catálogo del inventario</div>
 </div>
 
@@ -200,7 +180,6 @@
 
     <div class="form-container">
 
-        {{-- ===== INFORMACIÓN DEL PRODUCTO ===== --}}
         <div class="seccion-card">
             <div class="seccion-titulo">
                 <span>📦</span> Información del producto
@@ -209,10 +188,7 @@
             <div class="form-grid">
                 <div class="form-group">
                     <label>Código <span class="req">*</span></label>
-                    <div class="input-con-icono">
-                        <span class="icono-prefijo"></span>
-                        <input type="text" name="codigo" value="{{ old('codigo') }}" required>
-                    </div>
+                    <input type="text" name="codigo" value="{{ old('codigo') }}" required>
                     <div class="hint">Identificador único del producto</div>
                 </div>
 
@@ -222,17 +198,23 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Categoría</label>
-                    <input type="text" name="categoria" value="{{ old('categoria') }}">
-                    <div class="hint">Agrupa productos similares</div>
+                    <label>Presentación</label>
+                    <select name="categoria">
+                        <option value="">Seleccionar...</option>
+                        <option value="und"  {{ old('categoria') === 'und'  ? 'selected' : '' }}>Unidad (und)</option>
+                        <option value="caja" {{ old('categoria') === 'caja' ? 'selected' : '' }}>Caja</option>
+                        <option value="kg"   {{ old('categoria') === 'kg'   ? 'selected' : '' }}>Kilo (kg)</option>
+                        <option value="mts"  {{ old('categoria') === 'mts'  ? 'selected' : '' }}>Metro (mts)</option>
+                        <option value="lt"   {{ old('categoria') === 'lt'   ? 'selected' : '' }}>Litro (lt)</option>
+                    </select>
                 </div>
 
                 <div class="form-group">
                     <label>IVA (%) <span class="req">*</span></label>
                     <select name="iva" required>
                         <option value="">Seleccionar...</option>
-                        <option value="0" {{ old('iva') === '0' ? 'selected' : '' }}>0% — Exento</option>
-                        <option value="5" {{ old('iva') === '5' ? 'selected' : '' }}>5% — Reducido</option>
+                        <option value="0"  {{ old('iva') === '0'  ? 'selected' : '' }}>0% — Exento</option>
+                        <option value="5"  {{ old('iva') === '5'  ? 'selected' : '' }}>5% — Reducido</option>
                         <option value="19" {{ old('iva') === '19' ? 'selected' : '' }}>19% — General</option>
                     </select>
                 </div>
@@ -247,12 +229,10 @@
             </div>
         </div>
 
-        {{-- ===== AVISO IMPORTANTE ===== --}}
         <div class="info-box">
             💡 <strong>Nota:</strong> El stock y el costo del producto se calculan automáticamente desde las entradas de mercancía registradas. Después de crear el producto podrás registrar entradas para asignarle stock inicial.
         </div>
 
-        {{-- ===== BOTONES ===== --}}
         <div class="form-actions">
             <a href="{{ route('productos.index') }}" class="btn-cancelar">Cancelar</a>
             <button type="submit" class="btn-guardar">💾 Crear producto</button>
