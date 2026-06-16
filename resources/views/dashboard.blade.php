@@ -3,8 +3,6 @@
 @section('content')
 
 <style>
-  .dash { font-family: inherit; padding: 0; }
-
   .hero {
     background: #0C447C;
     border-radius: 12px;
@@ -12,7 +10,6 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 1.2rem;
     position: relative;
     overflow: hidden;
     min-height: 130px;
@@ -54,7 +51,6 @@
     font-size: 13px;
     color: rgba(255,255,255,0.55);
     margin-bottom: 0.3rem;
-    letter-spacing: 0.03em;
   }
 
   .hero-name {
@@ -75,48 +71,20 @@
   .hero-date { font-size: 12px; color: rgba(255,255,255,0.45); margin-bottom: 0.25rem; }
   .hero-time { font-size: 26px; font-weight: 500; color: rgba(255,255,255,0.9); letter-spacing: 2px; }
 
-  .section-label {
-    font-size: 11px; font-weight: 600;
-    color: #8A93A2;
-    text-transform: uppercase; letter-spacing: 0.08em;
-    margin: 0 0 0.6rem;
+  /* Logo grande debajo */
+  .logo-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 3rem;
+    opacity: 0.08;
   }
 
-  .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 8px;
+  .logo-section img {
+    width: 420px;
+    max-width: 80%;
+    filter: grayscale(100%);
   }
-
-  .stat-card {
-    background: white;
-    border: 1px solid #e8edf3;
-    border-radius: 12px;
-    padding: 0.9rem 1rem;
-    transition: border-color 0.15s, box-shadow 0.15s;
-    text-decoration: none;
-    display: block;
-  }
-  .stat-card:hover {
-    border-color: #378ADD;
-    box-shadow: 0 2px 12px rgba(55,138,221,0.10);
-  }
-
-  .stat-icon {
-    width: 32px; height: 32px; border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 16px; margin-bottom: 0.65rem;
-  }
-
-  .stat-icon.blue   { background: #E6F1FB; color: #185FA5; }
-  .stat-icon.green  { background: #EAF3DE; color: #3B6D11; }
-  .stat-icon.amber  { background: #FAEEDA; color: #854F0B; }
-  .stat-icon.red    { background: #FCEBEB; color: #A32D2D; }
-  .stat-icon.purple { background: #EEEDFE; color: #534AB7; }
-
-  .stat-num   { font-size: 22px; font-weight: 700; color: #0C447C; line-height: 1; margin-bottom: 3px; }
-  .stat-label { font-size: 11px; color: #8A93A2; text-transform: uppercase; letter-spacing: 0.05em; }
-  .stat-link  { display: flex; align-items: center; gap: 3px; font-size: 10px; color: #aab; margin-top: 0.5rem; }
 </style>
 
 {{-- Hero --}}
@@ -142,56 +110,9 @@
     </div>
 </div>
 
-{{-- Tarjetas --}}
-<p class="section-label">Resumen general</p>
-
-<div class="stats-grid">
-
-    @can('clientes')
-    <a href="{{ url('clientes') }}" class="stat-card">
-        <div class="stat-icon blue">🧑‍💼</div>
-        <div class="stat-num">{{ \App\Models\Cliente::count() }}</div>
-        <div class="stat-label">Clientes</div>
-        <div class="stat-link">→ Ver todos</div>
-    </a>
-    @endcan
-
-    @can('cotizaciones')
-    <a href="{{ route('cotizaciones.index') }}" class="stat-card">
-        <div class="stat-icon green">📋</div>
-        <div class="stat-num">{{ \App\Models\Cotizacion::count() }}</div>
-        <div class="stat-label">Cotizaciones</div>
-        <div class="stat-link">→ Ver todas</div>
-    </a>
-    @endcan
-
-    @can('facturas')
-    <a href="{{ route('facturas.index') }}" class="stat-card">
-        <div class="stat-icon amber">📄</div>
-        <div class="stat-num">{{ \App\Models\Factura::count() }}</div>
-        <div class="stat-label">Facturas</div>
-        <div class="stat-link">→ Ver todas</div>
-    </a>
-    @endcan
-
-    @can('productos')
-    <a href="{{ url('productos') }}" class="stat-card">
-        <div class="stat-icon red">📦</div>
-        <div class="stat-num">{{ \App\Models\Producto::count() }}</div>
-        <div class="stat-label">Productos</div>
-        <div class="stat-link">→ Ver todos</div>
-    </a>
-    @endcan
-
-    @can('usuarios')
-    <a href="{{ url('usuarios') }}" class="stat-card">
-        <div class="stat-icon purple">👥</div>
-        <div class="stat-num">{{ \App\Models\User::count() }}</div>
-        <div class="stat-label">Usuarios</div>
-        <div class="stat-link">→ Ver todos</div>
-    </a>
-    @endcan
-
+{{-- Logo grande opacado --}}
+<div class="logo-section">
+    <img src="{{ asset('images/factustock-logo.png') }}" alt="FactuStock">
 </div>
 
 <script>
