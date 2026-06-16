@@ -10,6 +10,7 @@ class Cliente extends Model
         'nombre',
         'cedula',
         'celular',
+        'email',
         'direccion',
     ];
 }
