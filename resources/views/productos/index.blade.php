@@ -94,7 +94,39 @@
     }
 
     .btn-modal-eliminar:hover { background: #c0392b; }
+
+    .alerta {
+        padding: 0.9rem 1.2rem;
+        border-radius: 10px;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+
+    .alerta-error {
+        background: #FCEBEB;
+        border: 1px solid #fca5a5;
+        color: #991b1b;
+    }
+
+    .alerta-success {
+        background: #EAF3DE;
+        border: 1px solid #86efac;
+        color: #166534;
+    }
 </style>
+
+{{-- Alertas --}}
+@if(session('error'))
+<div class="alerta alerta-error">⚠️ {{ session('error') }}</div>
+@endif
+
+@if(session('success'))
+<div class="alerta alerta-success">✅ {{ session('success') }}</div>
+@endif
 
 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;">
     <h2 style="color:#378ADD;">Lista de Productos</h2>
@@ -147,7 +179,6 @@
                Editar
             </a>
 
-            {{-- Formulario oculto --}}
             <form id="form-eliminar-{{ $producto->id }}"
                   method="POST"
                   action="{{ route('productos.destroy', $producto) }}"

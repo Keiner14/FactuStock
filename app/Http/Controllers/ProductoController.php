@@ -5,24 +5,22 @@ namespace App\Http\Controllers;
 use App\Exports\ProductosExport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Producto;
+use App\Models\EntradaMercancia;
 use Illuminate\Http\Request;
 
 class ProductoController extends Controller
 {
-    // Muestra la lista de todos los productos
     public function index()
     {
         $productos = Producto::all();
         return view('productos.index', compact('productos'));
     }
 
-    // Muestra el formulario para crear un nuevo producto
     public function create()
     {
         return view('productos.create');
     }
 
-    // Guarda un nuevo producto en la base de datos
     public function store(Request $request)
     {
         $request->validate([
@@ -40,24 +38,22 @@ class ProductoController extends Controller
         ]);
 
         Producto::create([
-            'nombre'    => $request->nombre,
-            'codigo'    => $request->codigo,
-            'categoria' => $request->categoria,
-            'iva'       => $request->iva,
-            'stock'     => 0,
+            'nombre'         => $request->nombre,
+            'codigo'         => $request->codigo,
+            'categoria'      => $request->categoria,
+            'iva'            => $request->iva,
+            'stock'          => 0,
             'costo_promedio' => 0,
         ]);
 
         return redirect()->route('productos.index')->with('success', 'Producto creado correctamente.');
     }
 
-    // Muestra el formulario para editar un producto existente
     public function edit(Producto $producto)
     {
         return view('productos.edit', compact('producto'));
     }
 
-    // Actualiza un producto existente en la base de datos
     public function update(Request $request, Producto $producto)
     {
         $request->validate([
@@ -84,7 +80,6 @@ class ProductoController extends Controller
         return redirect()->route('productos.index')->with('success', 'Producto actualizado correctamente.');
     }
 
-    // Consulta el stock disponible de un producto por nombre o código
     public function consultar(Request $request)
     {
         $producto = null;
@@ -99,7 +94,6 @@ class ProductoController extends Controller
         return view('productos.consultar', compact('producto', 'busqueda'));
     }
 
-    // Muestra el informe de todos los productos con sus existencias actuales
     public function informe()
     {
         $productos      = Producto::orderBy('stock', 'asc')->get();
@@ -109,15 +103,21 @@ class ProductoController extends Controller
         return view('productos.informe', compact('productos', 'totalProductos', 'totalStock'));
     }
 
-    // Exporta el informe de productos a Excel
     public function exportar()
     {
         return Excel::download(new ProductosExport(), 'informe_productos.xlsx');
     }
 
-    // Elimina un producto de la base de datos
     public function destroy(Producto $producto)
     {
+        // Verificar si tiene entradas de mercancía relacionadas
+        $tieneMovimientos = EntradaMercancia::where('producto_id', $producto->id)->count();
+
+        if ($tieneMovimientos > 0) {
+            return redirect()->route('productos.index')
+                ->with('error', 'No se puede eliminar "' . $producto->nombre . '" porque ya tiene movimientos de inventario registrados.');
+        }
+
         $producto->delete();
         return redirect()->route('productos.index')->with('success', 'Producto eliminado correctamente.');
     }
